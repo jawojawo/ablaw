@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
-use Spatie\LaravelPdf\Facades\Pdf;
+
+use Barryvdh\Snappy\Facades\SnappyPdf;
 
 class LawCaseController extends Controller
 {
@@ -33,7 +34,7 @@ class LawCaseController extends Controller
         $opposingParty = $request->input('opposing_party');
         $status = $request->input('status', []);
         $bills = $request->input('bills', []);
-        $cases = LawCase::query()->with(['client', 'associate', 'hearings', 'billings'])
+        $cases = LawCase::query()->with(['client', 'associates', 'hearings', 'billings'])
             ->withCount(['notes', 'billings', 'overDueBills', 'upcomingBills', 'dueTodayBills', 'paidBills'])
             ->when($search, function ($query, $search) {
                 $query->where('case_number', 'like', "%{$search}%")->orWhere('case_title', 'like', "%{$search}%");
@@ -66,7 +67,6 @@ class LawCaseController extends Controller
                 });
             })
             ->orderBy('updated_at', 'desc')
-            ->with(['client', 'associate'])
             ->paginate(15);
 
         return view('case.index', ['cases' => $cases]);
@@ -126,7 +126,7 @@ class LawCaseController extends Controller
             return redirect()->route('case.show', $lawCase->id)->with('success', 'Case created successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
-            //Log::error('Error creating case: ' . $e->getMessage());
+            //dd($e->getMessage());
             return redirect()->back()->withErrors('Error creating case.');
         }
     }
@@ -175,13 +175,16 @@ class LawCaseController extends Controller
         if ($request->pdf) {
             $lawCase->loadCount(['upcomingHearings', 'ongoingHearings', 'completedHearings', 'canceledHearings']);
             $lawCase->loadCount(['overDueBills', 'upcomingBills', 'dueTodayBills', 'paidBills']);
-            switch ($request->pdf) {
-                case 'view':
-                    return Pdf::view('case.pdf-view', ['lawCase' => $lawCase])->margins(10, 10, 10, 10)->footerView('pdf.footer');
-                    break;
-                case 'download':
-                    return Pdf::view('case.pdf-view', ['lawCase' => $lawCase])->margins(10, 10, 10, 10)->footerView('pdf.footer')->download($lawCase->case_number . '.pdf');
-            }
+            // return SnappyPdf::loadView('case.pdf-view', ['lawCase' => $lawCase]);
+            //  return view('case.pdf-view', ['lawCase' => $lawCase]);
+            return SnappyPdf::loadView('case.pdf-view', ['lawCase' => $lawCase])->inline();
+            // switch ($request->pdf) {
+            //     case 'view':
+            //              return Pdf::view('case.pdf-view', ['lawCase' => $lawCase])->margins(10, 10, 10, 10)->footerView('pdf.footer');
+            //         break;
+            //     case 'download':
+            //         return Pdf::view('case.pdf-view', ['lawCase' => $lawCase])->margins(10, 10, 10, 10)->footerView('pdf.footer')->download($lawCase->case_number . '.pdf');
+            // }
         }
         $lawCase->loadCount(['notes']);
 
@@ -491,7 +494,7 @@ class LawCaseController extends Controller
             'case_number' => 'required|unique:law_cases|max:255',
             'case_title' => 'required|max:255',
             'client_id' => 'required|exists:clients,id',
-            'associate_id' => 'required|exists:associates,id',
+            // 'associate_id' => 'required|exists:associates,id',
             'opposing_party' => 'required|string|max:255',
             'case_type' => ['required', 'string', Rule::in($caseTypes)],
             'party_role' => ['required', 'string', Rule::in($partyRoles)],

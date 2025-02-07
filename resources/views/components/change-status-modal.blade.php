@@ -14,15 +14,15 @@
                     <div class="d-flex" style="gap:10px">
                         <input type="radio" class="btn-check case-status" name="status" value="open"
                             id="openRadioButton" autocomplete="off">
-                        <label class="btn btn-outline-primary text-nowrap" for="openRadioButton">Open</label>
+                        <label class="btn btn-outline-primary text-nowrap" for="openRadioButton">Active</label>
 
-                        <input type="radio" class="btn-check  case-status" name="status" value="in_progress"
+                        {{-- <input type="radio" class="btn-check  case-status" name="status" value="in_progress"
                             id="inProgressRadioButton" autocomplete="off">
-                        <label class="btn btn-outline-info  text-nowrap" for="inProgressRadioButton">In Progress</label>
+                        <label class="btn btn-outline-info  text-nowrap" for="inProgressRadioButton">In Progress</label> --}}
 
                         <input type="radio" class="btn-check  case-status" name="status" value="settled"
                             id="settledRadioButton" autocomplete="off">
-                        <label class="btn btn-outline-warning" for="settledRadioButton">Settled</label>
+                        <label class="btn btn-outline-warning" for="settledRadioButton">Withdrawn</label>
 
                         <input type="radio" class="btn-check  case-status" name="status" value="won"
                             id="wonRadioButton" autocomplete="off">
@@ -33,15 +33,15 @@
                         <label class="btn btn-outline-danger" for="lostRadioButton">Lost</label>
 
 
-                        <input type="radio" class="btn-check  case-status" name="status" value="appeal"
+                        {{-- <input type="radio" class="btn-check  case-status" name="status" value="appeal"
                             id="appealRadtioButton" autocomplete="off">
-                        <label class="btn btn-outline-secondary  text-nowrap" for="appealRadtioButton">Appeal</label>
+                        <label class="btn btn-outline-secondary  text-nowrap" for="appealRadtioButton">Appeal</label> --}}
                         <input type="radio" class="btn-check  case-status" name="status" value="archived"
                             id="archivedRadioButton" autocomplete="off">
                         <label class="btn btn-outline-secondary  text-nowrap" for="archivedRadioButton">Archived</label>
-                        <input type="radio" class="btn-check  case-status" name="status" value="closed"
+                        {{-- <input type="radio" class="btn-check  case-status" name="status" value="closed"
                             id="closedRadioButton" autocomplete="off">
-                        <label class="btn btn-outline-secondary  text-nowrap" for="closedRadioButton">Closed</label>
+                        <label class="btn btn-outline-secondary  text-nowrap" for="closedRadioButton">Closed</label> --}}
                     </div>
                 </form>
             </div>

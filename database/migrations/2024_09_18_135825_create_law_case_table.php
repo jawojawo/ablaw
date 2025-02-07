@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('client_id');
             $table->foreign('client_id')->references('id')->on('clients');
             $table->enum('party_role', config('enums.party_roles'));
-            $table->unsignedBigInteger('associate_id');
-            $table->foreign('associate_id')->references('id')->on('associates');
+            // $table->unsignedBigInteger('associate_id');
+            // $table->foreign('associate_id')->references('id')->on('associates');
             $table->string('opposing_party');
             $table->enum('case_type', config('enums.case_types'));
             $table->decimal('total_deposits', 15, 2)->default(0);

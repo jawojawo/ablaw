@@ -271,13 +271,13 @@ window.toastError = (xhr) => {
 window.statusBadge = (status) => {
     switch (status) {
         case "open":
-            return "<span class='badge  text-bg-primary '>Open</span>";
+            return "<span class='badge  text-bg-primary '>Active</span>";
 
         case "in_progress":
             return "<span class='badge  text-bg-info '>In Progress</span>";
 
         case "settled":
-            return "<span class='badge  text-bg-warning '>Settled</span>";
+            return "<span class='badge  text-bg-warning '>Withdrawn</span>";
 
         case "won":
             return "<span class='badge  text-bg-success '>Won</span>";

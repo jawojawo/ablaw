@@ -86,7 +86,7 @@
                                             <input class="form-check-input toggle-column-check"
                                                 id="casesTableMainColumnCheckBox8" type="checkbox" checked
                                                 onchange="toggleColumn(this,8)">
-                                            Associate
+                                            Associates
                                         </div>
                                     </label>
                                 </li>
@@ -257,7 +257,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label d-block">Role</label>
-                                                <div class="btn-group radio-group party_role-group w-100" role="group"
+                                                <div class="d-flex flex-wrap gap-2 justify-content-between" role="group"
                                                     aria-label="Basic radio toggle button group">
                                                     @foreach (config('enums.party_roles') as $party_role)
                                                         <input type="checkbox" class="btn-check reverse"
@@ -265,8 +265,11 @@
                                                             id="btn{{ $party_role }}Search"
                                                             @if (is_array(request()->get('party_role')) && in_array($party_role, request()->get('party_role'))) checked @endif
                                                             autocomplete="off">
-                                                        <label class="btn btn-outline-primary text-capitalize"
+                                                        <label
+                                                            class="btn btn-outline{{ substr(config('enums.party_role_colors.' . $party_role), 1) }} text-capitalize"
                                                             for="btn{{ $party_role }}Search">{{ $party_role }}</label>
+                                                        {{-- <label class="btn btn-outline-primary text-capitalize"
+                                                            for="btn{{ $party_role }}Search">{{ $party_role }}</label> --}}
                                                     @endforeach
                                                 </div>
                                             </div>
@@ -318,23 +321,23 @@
                                                             @if (is_array(request()->get('status')) && in_array('open', request()->get('status'))) checked @endif
                                                             autocomplete="off">
                                                         <label class="btn btn-outline-primary text-nowrap"
-                                                            for="openSearchBadge">Open</label>
+                                                            for="openSearchBadge">Active</label>
                                                     </span>
-                                                    <span>
+                                                    {{-- <span>
                                                         <input type="checkbox" class="btn-check case-status reverse"
                                                             name="status[]" value="in_progress"
                                                             @if (is_array(request()->get('status')) && in_array('in_progress', request()->get('status'))) checked @endif
                                                             id="in_progressSearchBadge" autocomplete="off">
                                                         <label class="btn btn-outline-info text-nowrap"
                                                             for="in_progressSearchBadge">In Progress</label>
-                                                    </span>
+                                                    </span> --}}
                                                     <span>
                                                         <input type="checkbox" class="btn-check case-status reverse"
                                                             name="status[]" value="settled" id="settledSearchBadge"
                                                             @if (is_array(request()->get('status')) && in_array('settled', request()->get('status'))) checked @endif
                                                             autocomplete="off">
                                                         <label class="btn btn-outline-warning text-nowrap"
-                                                            for="settledSearchBadge">Settled</label>
+                                                            for="settledSearchBadge">Withdrawn</label>
                                                     </span>
                                                     <span>
                                                         <input type="checkbox" class="btn-check case-status reverse"
@@ -352,14 +355,14 @@
                                                         <label class="btn btn-outline-danger text-nowrap"
                                                             for="lostSearchBadge">Lost</label>
                                                     </span>
-                                                    <span>
+                                                    {{-- <span>
                                                         <input type="checkbox" class="btn-check  case-status reverse"
                                                             name="status[]" value="appeal" id="appealRadtioButton"
                                                             @if (is_array(request()->get('status')) && in_array('appeal', request()->get('status'))) checked @endif
                                                             autocomplete="off">
                                                         <label class="btn btn-outline-secondary  text-nowrap"
                                                             for="appealRadtioButton">Appeal</label>
-                                                    </span>
+                                                    </span> --}}
                                                     <span>
                                                         <input type="checkbox" class="btn-check  case-status reverse"
                                                             name="status[]" value="archived" id="archivedRadioButton"
@@ -376,14 +379,14 @@
                                                             for="archivedRadioButton">Archived</label>
                                                     </span> --}}
 
-                                                    <span>
+                                                    {{-- <span>
                                                         <input type="checkbox" class="btn-check case-status reverse"
                                                             name="status[]" value="closed" id="closedSearchBadge"
                                                             @if (is_array(request()->get('status')) && in_array('closed', request()->get('status'))) checked @endif
                                                             autocomplete="off">
                                                         <label class="btn btn-outline-secondary text-nowrap"
                                                             for="closedSearchBadge">Closed</label>
-                                                    </span>
+                                                    </span> --}}
 
                                                 </div>
                                             </div>
@@ -434,14 +437,20 @@
                                 data-bs-toggle="popover" data-bs-title="Party Role"
                                 data-bs-content="
                             <table class='table table-sm table-borderless'>
-                                <tr>
+                                @foreach (config('enums.party_roles') as $party_role)
+<tr>
+                                        <td>{{ "<span class='badge  " . config('enums.party_role_colors.' . $party_role) . " m-1'>" . $party_role . '</span>' }}</td>
+                                      
+                                    </tr>
+@endforeach
+                                {{-- <tr>
                                     <td>Petitioner</td>
                                     <td><span class='badge  t-warning m-1'>P</span></td>
                                 </tr>
                                 <tr>
                                     <td>Respondent</td>
                                     <td><span class='badge  t-info m-1'>R</span></td>
-                                </tr>
+                                </tr> --}}
                             </table>
                         ">
                                 Role
@@ -449,7 +458,7 @@
 
                         </th>
                         <th>opposing party</th>
-                        <th>associate</th>
+                        <th>associates</th>
                         @if (auth()->user()->can('view', getPermissionClass('Case Deposits')) &&
                                 auth()->user()->can('view', getPermissionClass('Case Expenses')))
                             <th>
@@ -528,7 +537,12 @@
                             </td>
                             <td class="text-center">{!! $case->case_party_role_badge !!}</td>
                             <td>{{ $case->opposing_party }}</td>
-                            <td>{{ $case->associate->name }}
+                            <td>
+                                <ul class="list-group">
+                                    @foreach ($case->associates as $associate)
+                                        <li class="list-group-item">{{ $associate->name }}</li>
+                                    @endforeach
+                                </ul>
                             </td>
                             @if (auth()->user()->can('view', getPermissionClass('Case Deposits')) &&
                                     auth()->user()->can('view', getPermissionClass('Case Expenses')))
@@ -674,8 +688,7 @@
                                         </li>
 
                                         <li>
-                                            <a class="dropdown-item"
-                                                href="{{ route('case.show', $case->id) }}?edit=true">
+                                            <a class="dropdown-item" href="#">
                                                 <i class="bi bi-pencil me-2"></i>Edit
                                             </a>
                                         </li>
@@ -683,10 +696,7 @@
                                             <hr class="dropdown-divider">
                                         </li>
                                         <li>
-
-                                            <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
-                                                data-bs-target="#deleteCaseModal" data-case-id="{{ $case->id }}"
-                                                data-modal-title="{{ $case->case_number }}">
+                                            <a class="dropdown-item text-danger" href="#">
                                                 <i class="bi bi-trash me-2"></i>Delete
                                             </a>
                                         </li>
@@ -702,7 +712,5 @@
         </table>
 
     </div>
-    @can('delete', getPermissionClass('Cases'))
-        <x-case.delete-case-modal />
-    @endcan
+
 @endsection

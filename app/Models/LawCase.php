@@ -65,9 +65,10 @@ class LawCase extends Model
     {
         return $this->belongsTo(Client::class);
     }
-    public function associate()
+    public function associates()
     {
-        return $this->belongsTo(Associate::class);
+        return $this->belongsToMany(Associate::class, 'case_associates');
+        //return $this->belongsTo(Associate::class);
     }
 
     public function adminDeposits()
@@ -138,23 +139,24 @@ class LawCase extends Model
     }
     public function getCasePartyRoleBadgeAttribute()
     {
-        if ($this->party_role == 'petitioner') {
-            return "<span class='badge  t-warning m-1'>P</span>";
-        } elseif ($this->party_role == 'respondent') {
-            return "<span class='badge  t-info m-1'>R</span>";
-        }
+        return "<span class='badge  " . config('enums.party_role_colors.' . $this->party_role) . " m-1'>" . $this->party_role . "</span>";
+        // if ($this->party_role == 'petitioner') {
+        //     return "<span class='badge  t-warning m-1'>P</span>";
+        // } elseif ($this->party_role == 'respondent') {
+        //     return "<span class='badge  t-info m-1'>R</span>";
+        // }
     }
     public function getStatusBadgeAttribute()
     {
         switch ($this->status) {
             case 'open':
-                return "<span class='badge  text-bg-primary '>Open</span>";
+                return "<span class='badge  text-bg-primary '>Active</span>";
                 break;
-            case 'in_progress':
-                return "<span class='badge  text-bg-info '>In Progress</span>";
-                break;
+                // case 'in_progress':
+                //     return "<span class='badge  text-bg-info '>In Progress</span>";
+                //     break;
             case 'settled':
-                return "<span class='badge  text-bg-warning '>Settled</span>";
+                return "<span class='badge  text-bg-warning '>Withdrawn</span>";
                 break;
             case 'won':
                 return "<span class='badge  text-bg-success '>Won</span>";
@@ -165,12 +167,12 @@ class LawCase extends Model
             case 'archived':
                 return "<span class='badge  text-bg-secondary '>Archived</span>";
                 break;
-            case 'appeal':
-                return "<span class='badge  text-bg-secondary '>Appeal</span>";
-                break;
-            case 'closed':
-                return "<span class='badge  text-bg-secondary '>Closed</span>";
-                break;
+                // case 'appeal':
+                //     return "<span class='badge  text-bg-secondary '>Appeal</span>";
+                //     break;
+                // case 'closed':
+                //     return "<span class='badge  text-bg-secondary '>Closed</span>";
+                //     break;
 
             default:
                 return '';

@@ -2,7 +2,8 @@
 return [
     'payment_types' => ['cash', 'check', 'e-wallet', 'asset'],
     'case_types' => ['litigation', 'non_litigation'],
-    'party_roles' => ['petitioner', 'respondent'],
+    'party_roles' => ['Plaintiff', 'Respondent', 'Accused', 'Defendant', 'Appellee', 'Appellant'],
+    'party_role_colors' => ['Plaintiff' => 't-primary', 'Respondent' => 't-secondary', 'Accused' => 't-danger', 'Defendant' => 't-warning', 'Appellee' => 't-info', 'Appellant' => 't-success'],
     'billing_status' => ['paid', 'partially_paid', 'unpaid'],
     'case_status' => ['open', 'in_progress', 'settled', 'won', 'lost', 'archived', 'appeal', 'closed',],
     'contact_types' => ['phone', 'email'],

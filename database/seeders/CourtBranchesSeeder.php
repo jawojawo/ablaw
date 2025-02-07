@@ -29,18 +29,18 @@ class CourtBranchesSeeder extends Seeder
                 'type' =>  $cleanedType,
                 'branch' => trim($data[3]) ?: null,
                 'judge' => trim($data[4]) ?: null,
-                'address' => $faker->address,
+                //  'address' => $faker->address,
             ]);
-            $contactTypes = config('enums.contact_types');
-            foreach (range(1, rand(1, 5)) as $contactIndex) {
-                Contact::create([
-                    'contact_type' => $faker->randomElement($contactTypes),
-                    'contact_value' => $faker->unique()->phoneNumber,
-                    'contact_label' => rand(1, 100) <= 50 ? $faker->word : null,
-                    'contactable_id' => $CourtBranch->id,
-                    'contactable_type' => CourtBranch::class,
-                ]);
-            }
+            // $contactTypes = config('enums.contact_types');
+            // foreach (range(1, rand(1, 5)) as $contactIndex) {
+            //     Contact::create([
+            //         'contact_type' => $faker->randomElement($contactTypes),
+            //         'contact_value' => $faker->unique()->phoneNumber,
+            //         'contact_label' => rand(1, 100) <= 50 ? $faker->word : null,
+            //         'contactable_id' => $CourtBranch->id,
+            //         'contactable_type' => CourtBranch::class,
+            //     ]);
+            // }
         }
 
         fclose($csvFile);

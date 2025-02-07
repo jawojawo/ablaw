@@ -14,13 +14,13 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UserSeeder::class);
         $this->call(CourtBranchesSeeder::class);
-        $this->call(AssociateSeeder::class);
+        // $this->call(AssociateSeeder::class);
 
         // $this->call(AdmininistrativeFeeCategorySeeder::class);
 
 
-        $this->call(ClientSeeder::class);
-        $this->call(OfficeExpenseAndCustomEventSeeder::class);
-        //$this->call(LawCaseSeeder::class);
+        // $this->call(ClientSeeder::class);
+        // $this->call(OfficeExpenseAndCustomEventSeeder::class);
+        // $this->call(LawCaseSeeder::class);
     }
 }

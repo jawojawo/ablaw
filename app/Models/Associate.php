@@ -33,7 +33,8 @@ class Associate extends Model
 
     public function lawCases()
     {
-        return $this->hasMany(LawCase::class);
+        return $this->belongsToMany(LawCase::class, 'case_associates');
+        //return $this->hasMany(LawCase::class);
     }
     public function getCaseStatusCountBadgesAttribute()
     {

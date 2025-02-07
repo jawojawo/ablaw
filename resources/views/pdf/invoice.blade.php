@@ -26,10 +26,14 @@
         }
 
         .d-flex {
+            display: -webkit-box;
+            /* wkhtmltopdf uses this one */
             display: flex;
         }
 
         .justify-content-between {
+            -webkit-box-pack: justify;
+            /* wkhtmltopdf uses this one */
             justify-content: space-between
         }
 

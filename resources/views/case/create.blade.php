@@ -87,7 +87,15 @@
                     </div>
                     <div class=" flex-shrink-1">
                         <label class="form-label d-block">Role <span class="text-danger">*</span></label>
-                        <div class="btn-group radio-group party_role-group  @error('party_role') is-invalid @enderror"
+                        <select class="form-select @error('party_role') is-invalid @enderror" name="party_role" required
+                            autocomplete="off">
+                            <option value="" selected disabled>Select Role</option>
+                            @foreach (config('enums.party_roles') as $party_role)
+                                <option value="{{ $party_role }}" @if (old('party_role') == $party_role) selected @endif>
+                                    {{ $party_role }}</option>
+                            @endforeach
+                        </select>
+                        {{-- <div class="btn-group radio-group party_role-group  @error('party_role') is-invalid @enderror"
                             role="group" aria-label="Basic radio toggle button group">
                             @foreach (config('enums.party_roles') as $party_role)
                                 <input type="radio" class="btn-check" value="{{ $party_role }}" name="party_role"
@@ -96,7 +104,7 @@
                                 <label class="btn btn-outline-primary text-uppercase"
                                     for="btn{{ $party_role }}">{{ $party_role }}</label>
                             @endforeach
-                        </div>
+                        </div> --}}
                         @error('party_role')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -107,20 +115,24 @@
                         </div>
 
                     </div>
-                    <div class="flex-grow-1">
-                        <label class="form-label d-block">Associate <span class="text-danger">*</span></label>
 
+                    <div class="flex-grow-1 ">
+                        <label class="form-label d-block">Associates <span class="text-danger">*</span></label>
                         <div id="associateInfo" class="info">
                             <div id="associateId" class="id"></div>
                             <div id="associateName" class="name"></div>
                             <button type="button" class="btn btn-primary infoBtn searchBtn" id="associateSearch"
                                 data-bs-toggle="modal" data-bs-target="#getAssociatesModal"><i
-                                    class="bi bi-search"></i></button>
+                                    class="bi bi-plus-lg"></i></button>
                             <button type="button" class="btn btn-danger infoBtn clearBtn" id="associateClear"><i
                                     class="bi bi-x-lg"></i></button>
                         </div>
-                        <input type="text" class="form-control visually-hidden" type="hidden" name="associate_id"
-                            id="associateIdInp" autocomplete="off" required>
+
+                        <ul class="list-group associate-list mt-2"></ul>
+
+                        {{-- <input type="text" class="form-control visually-hidden" type="hidden" name="associate_id"
+                            id="associateIdInp" autocomplete="off" required> --}}
+                        
                         <div class="invalid-feedback">
                             Associate is Required.
                         </div>
@@ -199,15 +211,34 @@
         });
 
         function selectAssociate(associate) {
-            $('#associateIdInp').val(associate.id)
-            $('#associateId').text(associate.id)
-            $('#associateName').text(associate.name)
+            if ($(`#associate-${associate.id}`).length > 0) {
+                return
+            }
+            $('.associate-list').append(`
+            <li class="list-group-item d-flex gap-2 align-items-center justify-content-between  p-0" id="associate-${associate.id}">
+                <div class="d-flex gap-2 align-items-center">
+                    <div class="associate-id px-3 py-2 border-end">${associate.id}</div>
+                    <div class="associate-name">${associate.name}</div>
+                </div>
+                <button type="button" class="btn  text-danger clearAssociateBtn"><i
+                        class="bi bi-x-lg"></i></button>
+                <input type="hidden" name="associate_ids[]" value="${associate.id}">
+            </li>
+            `)
         }
-        $(document).on('click', '#associateClear', function(e) {
-            $('#associateIdInp').val('')
-            $('#associateId').text('')
-            $('#associateName').text('')
+        $(document).on('click', '.clearAssociateBtn', function(e) {
+            $(this).closest('li').remove();
         });
+        // function selectAssociate(associate) {
+        //     $('#associateIdInp').val(associate.id)
+        //     $('#associateId').text(associate.id)
+        //     $('#associateName').text(associate.name)
+        // }
+        // $(document).on('click', '#associateClear', function(e) {
+        //     $('#associateIdInp').val('')
+        //     $('#associateId').text('')
+        //     $('#associateName').text('')
+        // });
 
 
         function selectCourtBranch(courtBranch, hearingCardId) {
